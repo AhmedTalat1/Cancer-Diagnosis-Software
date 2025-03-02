@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='SLstyles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <form id="register-form" method="POST" action="{{ url_for('register') }}">
+                {{ form.hidden_tag() }}
+
+                <div class="header">
+                    <h1>Create Account</h1>
+                    <p>Join us for an enhanced experience</p>
+                </div>
+
+                <!-- First Name -->
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    {{ form.fname(class="form-input", placeholder="First Name") }}
+                    {% if form.fname.errors %}
+                        <ul class="errors">
+                            {% for error in form.fname.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    {{ form.lname(class="form-input", placeholder="Last Name") }}
+                    {% if form.lname.errors %}
+                        <ul class="errors">
+                            {% for error in form.lname.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    {{ form.username(class="form-input", placeholder="Username") }}
+                    {% if form.username.errors %}
+                        <ul class="errors">
+                            {% for error in form.username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    {{ form.email(class="form-input", placeholder="Email") }}
+                    {% if form.email.errors %}
+                        <ul class="errors"">
+                            {% for error in form.email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    {{ form.password(class="form-input", placeholder="Password", minlength="8") }}
+                    {% if form.password.errors %}
+                        <ul class="errors">
+                            {% for error in form.password.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    {{ form.confirm_password(class="form-input", placeholder="Confirm Password") }}
+                    {% if form.confirm_password.errors %}
+                        <ul class="errors">
+                            {% for error in form.confirm_password.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <h3>Sign Up</h3>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <div class="toggle-form">
+                    <a href="{{ url_for('login') }}" class="toggle-btn">Already have an account? Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

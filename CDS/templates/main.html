@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Image Analysis</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='mainstyles.css') }}">
+</head>
+<body>
+    
+    <div class="background-overlay"></div>
+    
+    <div class="container">
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <h2>Upload Medical Image</h2>
+            <div class="upload-area" id="dropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & Drop your image here</p>
+                <span>or</span>
+                <label for="fileInput" class="upload-btn">Choose File</label>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+                <div id="preview" class="image-preview"></div>
+            </div>
+        </section>
+
+        <!-- Cancer Type Selection -->
+        <section class="type-section">
+            <h2>Select Cancer Type</h2>
+            <div class="type-grid">
+                <div class="type-card" data-type="brain">
+                    <i class="fas fa-brain"></i>
+                    <h3>Brain Cancer</h3>
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <div class="check-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="type-card" data-type="skin">
+                    <i class="fas fa-allergies"></i>
+                    <h3>Skin Cancer</h3>
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <div class="check-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="type-card" data-type="lung">
+                    <i class="fas fa-lungs"></i>
+                    <h3>Lung Cancer</h3>
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <div class="check-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chatbot Section -->
+        <section class="chatbot-section">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Assistant</h3>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="pulse"></span>
+                        Online
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <i class="fas fa-robot"></i>
+                        <div class="message-content">
+                            Hello! I'm your medical AI assistant. Upload an image and select the cancer type for analysis.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" placeholder="Type your message..." id="messageInput">
+                    <button class="send-btn" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Drag and Drop functionality
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            handleFile(file);
+        });
+
+        function handleFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Cancer Type Selection
+        const typeCards = document.querySelectorAll('.type-card');
+        typeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                typeCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            });
+        });
+
+        // Chat functionality
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatMessages = document.getElementById('chatMessages');
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            if (!isUser) {
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-robot';
+                messageDiv.appendChild(icon);
+            }
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = message;
+            messageDiv.appendChild(messageContent);
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                messageInput.value = '';
+                
+                setTimeout(() => {
+                    addMessage("I've received your message. However, this feature is coming soon!");
+                }, 1000);
+            }
+        }
+
+        sendButton.addEventListener('click', handleMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleMessage();
+            }
+        });
+    </script>
+</body>
+</html>
